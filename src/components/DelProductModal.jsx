@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Modal } from 'bootstrap';
+import { useDispatch } from 'react-redux';
+import { pushMessage } from '../redux/toastSlice';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -13,6 +15,8 @@ function DelProductModal({
 }){
 
     const delProductModalRef = useRef(null);
+
+    const dispatch = useDispatch();
 
     useEffect(()=>{
         new Modal(delProductModalRef.current,{
@@ -43,9 +47,19 @@ function DelProductModal({
                 is_enabled: tempProduct.is_enabled ? 1 : 0
                 }
             });
-            console.log(res);
+            // console.log(res);
+            dispatch(pushMessage({
+                text: "刪除產品成功",
+                status: "success"
+            }))
         } catch (error) {
-            alert("刪除產品失敗!")
+            // alert("刪除產品失敗!")
+            const { message } = error.response.data;
+        
+            dispatch(pushMessage({
+                text: message,
+                status: "failed"
+            }))
         }
     }  
     

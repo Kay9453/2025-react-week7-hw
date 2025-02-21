@@ -93,21 +93,24 @@ function ProductModal({
 
     const createProduct = async(e) => {
         try {
-          const res = await axios.post(`${BASE_URL}/v2/api/${API_PATH}/admin/product`,{
-            "data": {
-              ...modalData,
-              origin_price: Number(modalData.origin_price),
-              price: Number(modalData.price),
-              is_enabled: modalData.is_enabled ? 1 : 0
-            }
-          });
-          console.log(res);
+            const res = await axios.post(`${BASE_URL}/v2/api/${API_PATH}/admin/product`,{
+                "data": {
+                    ...modalData,
+                    origin_price: Number(modalData.origin_price),
+                    price: Number(modalData.price),
+                    is_enabled: modalData.is_enabled ? 1 : 0
+                }
+            });
+            dispatch(pushMessage({
+                text: "新增產品成功",
+                status: "success"
+            }))
         //   handleCloseProductModal();
         } catch (error) {
         //   alert("新增產品失敗!")
         // console.log(error.response.data.message);
 
-        const { message } = error.response.data;
+            const { message } = error.response.data;
         
             dispatch(pushMessage({
                 text: message.join("、"),
@@ -132,7 +135,12 @@ function ProductModal({
                 status: "success"
             }))
         } catch (error) {
-          alert("編輯產品失敗!")
+        //   alert("編輯產品失敗!")
+            const { message } = error.response.data;
+            dispatch(pushMessage({
+                text: message.join("、"),
+                status: "failed"
+            }))
         }
     }
 
