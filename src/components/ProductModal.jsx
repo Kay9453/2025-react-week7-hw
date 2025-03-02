@@ -101,11 +101,11 @@ function ProductModal({
                     is_enabled: modalData.is_enabled ? 1 : 0
                 }
             });
+            handleCloseProductModal();
             dispatch(pushMessage({
                 text: "新增產品成功",
                 status: "success"
             }))
-        //   handleCloseProductModal();
         } catch (error) {
         //   alert("新增產品失敗!")
         // console.log(error.response.data.message);
@@ -129,7 +129,7 @@ function ProductModal({
               is_enabled: modalData.is_enabled ? 1 : 0
             }
           });
-        
+            handleCloseProductModal();
             dispatch(pushMessage({
                 text: "編輯產品成功",
                 status: "success"
@@ -149,7 +149,7 @@ function ProductModal({
         try {
           await apiCall();
           getProducts();
-          handleCloseProductModal();
+        //   handleCloseProductModal();
         } catch (error) {
           alert('更新產品失敗!');
         }

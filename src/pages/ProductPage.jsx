@@ -4,6 +4,7 @@ import Pagination from '../components/Pagination';
 import ProductModal from '../components/ProductModal';
 import DelProductModal from '../components/DelProductModal';
 import Toast from '../components/Toast';
+import ReactLoading from 'react-loading';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -32,7 +33,10 @@ function ProductPage({setIsAuth}){
     const [isProductModalOpen,setIsProductModalOpen] = useState(false); //控制 productModal 開關
     const [isDelProductModalOpen,setIsDelProductModalOpen] = useState(false); //控制 DelProductModal 開關
 
+    const [isScreenLoading, setIsScreenLoading] = useState(false);  //儲存全螢幕 Loading 狀態
+
     const getProducts = async ( page=1 ) => {
+      setIsScreenLoading(true);
         try {
             const res = await axios.get(
             `${BASE_URL}/v2/api/${API_PATH}/admin/products?page=${page}`
@@ -41,6 +45,8 @@ function ProductPage({setIsAuth}){
             setPageInfo(res.data.pagination);
         } catch (error) {
             alert("取得產品失敗");
+        } finally {
+          setIsScreenLoading(false);
         }
     };
   
@@ -53,7 +59,7 @@ function ProductPage({setIsAuth}){
     
         switch (mode) {
           case 'create':
-            setTempProduct(defaultModalState);
+            setTempProduct({...defaultModalState});
             break;
           case 'edit':
             setTempProduct({
@@ -84,7 +90,6 @@ function ProductPage({setIsAuth}){
     const handleLogout = async () => {
       try {
           const res = await axios.post(`${BASE_URL}/v2/logout/`);
-          console.log(res);
           setIsAuth(false);
       } catch (error) {
           alert("登出失敗");
@@ -140,6 +145,19 @@ function ProductPage({setIsAuth}){
             <Pagination pageInfo={pageInfo} handlePageChange={handlePageChange} />
           </div>
         </div>
+        {
+          isScreenLoading && <div
+              className="d-flex justify-content-center align-items-center"
+              style={{
+              position: "fixed",
+              inset: 0,
+              backgroundColor: "rgba(255,255,255,0.3)",
+              zIndex: 999,
+              }}
+          >
+              <ReactLoading type="spin" color="black" width="4rem" height="4rem" />
+          </div>
+        }
     </div>
     <ProductModal 
         tempProduct={tempProduct} 

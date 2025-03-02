@@ -8,20 +8,32 @@ function Pagination({
         <nav>
           <ul className="pagination">
             <li className={`page-item ${!pageInfo.has_pre && 'disabled'}`}>
-              <a onClick={()=>{handlePageChange(pageInfo.current_page-1)}} className="page-link" href="#">
+              <a 
+                onClick={(e)=>{
+                  e.preventDefault();
+                  handlePageChange(pageInfo.current_page-1)}} 
+                className="page-link">
                 上一頁
               </a>
             </li>
             { Array.from({ length: pageInfo.total_pages}).map((_,index) => 
               (<li className={`page-item ${pageInfo.current_page === index + 1 && 'active'}`} key={ index + 1}>
-                <a onClick={()=>{handlePageChange(index+1)}} className="page-link" href="#">
+                <a 
+                  onClick={(e)=>{
+                    e.preventDefault();
+                    handlePageChange(index+1)}} 
+                  className="page-link">
                   {index+1}
                 </a>
               </li>)
             )}
           
             <li className={`page-item ${!pageInfo.has_next && 'disabled'}`}>
-              <a onClick={()=>{handlePageChange(pageInfo.current_page+1)}} className="page-link" href="#">
+              <a 
+                onClick={(e)=>{
+                  e.preventDefault();
+                  handlePageChange(pageInfo.current_page+1)}} 
+                className="page-link">
                 下一頁
               </a>
             </li>
